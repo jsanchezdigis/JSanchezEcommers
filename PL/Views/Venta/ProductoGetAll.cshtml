@@ -1,0 +1,94 @@
+﻿@model ML.Producto
+@{
+    ViewData["Title"] = "ProductoGetAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div style="float:right">
+            @Html.ActionLink("Carrito", "ResumenCompra", "Venta", htmlAttributes: new { @class = "btn btn-success" })
+        </div>
+    </div>
+</div>
+
+<h1>TODOS LOS PRODUCTOS</h1>
+
+@using (Html.BeginForm("ProductoGetAll", "Venta", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="row">
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.Categoria)
+            @Html.DropDownListFor(model => model.Categoria.IdCategoria, new SelectList(Model.Categoria.Categorias, "IdCategoria", "Nombre"), "Seleccione", new { @class = "form-control", @id = "ddlCategoria" })
+        </div>
+
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.Nombre)
+            <div class="input-group">
+                <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-signature" style="color:darkcyan"></i></span>
+                @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", @id = "txtNombre" })
+
+                @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+            </div>
+            @Html.Label(null, "", new { @id = "lblNombre" })
+        </div>
+
+        <div class="col-md-3 mt-4">
+            <input type="submit" value="Filtrar" class="btn btn-success" />
+        </div>
+    </div>
+
+}
+
+<div class="row row-cols-2 row-cols-md-3 ">
+    @foreach (ML.Producto producto in Model.Productos)
+    {
+        <div class="col">
+            <div class="card bg-dark  h-100" style="max-width: 540px;">
+                <div class="row g-0">
+                    <div class="col-md-4 ">
+                        @if (producto.Imagen != null)
+                        {
+
+                            <img id="Img" src="data:image/*;base64,@producto.Imagen" class="img-fluid rounded-start" alt="..." />
+
+                        }
+                        else
+                        {
+                            <img id="Img" src="~/Imagenes/default-store-350x350.jpg" class="img-fluid rounded-start" alt="..." />
+                        }
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body text-white">
+                            <h5 class="card-title text-center">@producto.Nombre</h5>
+                            <hr>
+                            <p class="card-text limited-text">@producto.Descripcion</p>
+                            <p class="card-text">Precio: $@producto.Precio</p>
+                            <p class="card-text">Descuento: $@producto.PrecioVenta</p>
+                            <p class="card-text">Existencias: @producto.Stock</p>
+                            @if (producto.CodigoBarra != null)
+                            {
+
+                                <img id="Img" src="data:image/*;base64,@producto.CodigoBarra" class="img-fluid rounded-start" alt="..." style="display: block;width: 100%; margin:0 auto;," />
+
+                            }
+                            else
+                            {
+                                <img id="Img" src="~/Imagenes/default-store-350x350.jpg" class="img-fluid rounded-start" alt="..." />
+                            }
+
+                            <p class="card-text">
+                                <a href="@Url.Action("CartPost", "Venta", new {IdProducto = producto.IdProducto})" class="btn btn-success">Añadir<i class="bi bi-cart3"></i> </a>
+                            </p>
+                        </div>
+
+                    </div>
+                    <div class="card-footer " style="background-color: #718387;color: white; ">
+                        <small class=""> @producto.Categoria.Nombre</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+

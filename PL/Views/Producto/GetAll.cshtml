@@ -1,0 +1,104 @@
+﻿@model ML.Producto
+@{
+    ViewData["Title"] = "GetAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <h2 class="text-center">Productos</h2>
+        <p>Agregar, Eliminar, Modificar los Productos</p>
+    </div>
+
+    <hr />
+    <div class="row">
+        <div style="float:right">
+            @Html.ActionLink("Agregar", "Form", "Producto", htmlAttributes: new { @class = "btn btn-success" })
+        </div>
+    </div>
+    <hr />
+
+    @using (Html.BeginForm("GetAll", "Producto", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="row">
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.Categoria)
+                <div class="input-group">
+                    <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-globe" style="color:darkcyan"></i></span>
+                    @Html.DropDownListFor(model => model.Categoria.IdCategoria, new SelectList(Model.Categoria.Categorias, "IdCategoria", "Nombre"), "Selecciona", new { @class = "form-control", @id = "ddlCategoria" })
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Nombre)
+                <div class="input-group">
+                    <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-signature" style="color:darkcyan"></i></span>
+                    @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", @id = "txtNombre" })
+
+                    @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+                </div>
+                @Html.Label(null, "", new { @id = "lblNombre" })
+            </div>
+            <div class="col-md-2 mt-2">
+                <input type="submit" value="Buscar" class="btn btn-success mx-auto my-3" />
+            </div>
+        </div>
+
+    }
+    </hr>
+
+    <div class="row row-cols-2 row-cols-md-3 ">
+        @foreach (ML.Producto producto in Model.Productos)
+        {
+            <div class="col">
+                <div class="card bg-dark  h-100" style="max-width: 540px;">
+                    <div class="row g-0">
+                        <div class="col-md-4 ">
+                            @if (producto.Imagen != null)
+                            {
+
+                                <img id="Img" src="data:image/*;base64,@producto.Imagen" class="img-fluid rounded-start" alt="..." />
+
+                            }
+                            else
+                            {
+                                <img id="Img" src="~/Imagenes/default-store-350x350.jpg" class="img-fluid rounded-start" alt="..." />
+                            }
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body text-white">
+                                <h5 class="card-title text-center">@producto.Nombre</h5>
+                                <hr>
+                                <p class="card-text limited-text">@producto.Descripcion</p>
+                                <p class="card-text">Precio: $@producto.Precio</p>
+                                <p class="card-text">Descuento: $@producto.PrecioVenta</p>
+                                <p class="card-text">Existencias: @producto.Stock</p>
+                                @if (producto.CodigoBarra != null)
+                                {
+
+                                    <img id="Img" src="data:image/*;base64,@producto.CodigoBarra" class="img-fluid rounded-start" alt="..." />
+
+                                }
+                                else
+                                {
+                                    <img id="Img" src="~/Imagenes/default-store-350x350.jpg" class="img-fluid rounded-start" alt="..." />
+                                }
+
+                                <p class="card-text">
+                                    <a href="@Url.Action("Form", "Producto", new { IdProducto = producto.IdProducto })" class="btn btn-warning"><i class="fa-solid fa-pen-to-square"></i> Editar</a>
+                                    <a href="@Url.Action("Delete", "Producto", new { IdProducto = producto.IdProducto })" class="btn btn-danger"><i class="fa-solid fa-eraser" onclick="return confirm('Estas seguro que deseas inactivar este registro?');"></i> Eliminar</a>
+                                </p>
+                            </div>
+
+                        </div>
+                        <div class="card-footer " style="background-color: #718387;color: white; ">
+                            <small class=""> @producto.Categoria.Nombre</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+</div>
+

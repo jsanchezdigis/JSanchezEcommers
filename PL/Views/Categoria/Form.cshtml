@@ -1,0 +1,54 @@
+﻿@model ML.Categoria
+@{
+    ViewData["Title"] = "Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="text-center">Agregar Nueva Categoría</h2>
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-12">
+            @using (Html.BeginForm("Form", "Categoria", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <div class="form-horizontal">
+                    @if (Model != null)
+                    {
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                @Html.LabelFor(model => model.IdCategoria, new { @class = "visually-hidden" })
+                                @Html.TextBoxFor(model => model.IdCategoria, new { @class = "visually-hidden form-control" })
+                            </div>
+                        </div>
+                    }
+
+                    <div class="row">
+
+                        <div class="col-md-4">
+                            @Html.LabelFor(model => model.Nombre)
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-list"></i></span>
+                                @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", @id = "datepicker", @autocomplete = "false" })
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <a><input type="submit" value="Guardar" class="btn btn-success col-md-12" id="xlsx" /></a>
+                            </div>
+                            <div class="col-md-6">
+                                <a href="@Url.Action("GetAll","Categoria")"><input type="button" value="Cancelar" class="btn btn-danger col-md-12" id="txt" /></a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+

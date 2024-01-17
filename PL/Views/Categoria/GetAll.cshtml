@@ -1,0 +1,52 @@
+﻿@model ML.Categoria
+@{
+    ViewData["Title"] = "GetAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <h2 class="text-center">Categorías</h2>
+    </div>
+    <hr />
+    <div class="row">
+        <div >
+            @Html.ActionLink("Agregar", "Form", "Categoria", htmlAttributes: new { @class = "btn btn-success" })
+        </div>
+    </div>
+    <br />
+
+    <div class="row">
+        @if (Model.Categorias != null)
+        {
+            <table class="table table-dark table-bordered table-responsive table-hover table-striped">
+            <thead>
+                <tr class="table-secondary">
+                    <td class="text-center" style=" font-weight:bold;">Editar</td> 
+                    
+                    <td style="display: none;">IdCategoria</td>
+                    <td class="text-center" style=" font-weight:bold;">Nombre</td>
+                    
+                    <td class="text-center" style=" font-weight:bold;">Eliminar</td>
+                </tr>
+            </thead>
+            
+            <tbody>
+                @foreach (ML.Categoria categoria in Model.Categorias)
+                {
+                    <tr>
+
+                            <td class="text-center"><a class="btn btn-warning" href="@Url.Action("Form", "Categoria", new { IdCategoria = categoria.IdCategoria })"><i class="fa-solid fa-pen-to-square"></i></a></td>
+
+                            <td style="display: none;">@categoria.IdCategoria</td>
+                            <td class="text-center">@categoria.Nombre</td>
+
+                            <td class="text-center"><a class="btn btn-danger" href="@Url.Action("Delete", "Categoria", new { IdCategoria = categoria.IdCategoria })" onclick="return confirm('Estas seguro que deseas inactivar este registro?');"><i class="fa-solid fa-eraser"></i></a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        }
+    </div>
+</div>
+

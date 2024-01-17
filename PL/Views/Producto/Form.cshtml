@@ -1,0 +1,153 @@
+﻿@model ML.Producto
+@{
+    ViewData["Title"] = "Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="text-center">Formulario de Productos</h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            @using (Html.BeginForm("Form", "Producto", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <div class="form-horizontal">
+                    @if (Model != null)
+                    {
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                @Html.LabelFor(model => model.IdProducto, new { @class = "visually-hidden" })
+                                @Html.TextBoxFor(model => model.IdProducto, new { @class = "visually-hidden form-control" })
+                            </div>
+                        </div>
+                    }
+                    
+                    <div class="row">
+                        <div class="col-md-3">
+                            @Html.LabelFor(model => model.Nombre)
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-list"></i></span>
+                                @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", @id = "datepicker", @autocomplete = "false" })
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            @Html.LabelFor(model => model.Descripcion)
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-signature" style="color:darkcyan"></i></span>
+                                @Html.TextBoxFor(model => model.Descripcion, new { @class = "form-control" })
+                            </div>
+                            @Html.Label(null, "", new { @id = "lblDescripcion" })
+                        </div>
+
+                        <div class="col-md-3">
+                            @Html.LabelFor(model => model.Precio)
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-signature" style="color:darkcyan"></i></span>
+                                @Html.TextBoxFor(model => model.Precio, new { @class = "form-control" })
+                            </div>
+                            @Html.Label(null, "", new { @id = "lblPrecio" })
+                        </div>
+
+                        <div class="col-md-3">
+                            @Html.LabelFor(model => model.Stock)
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-signature" style="color:darkcyan"></i></span>
+                                @Html.TextBoxFor(model => model.Stock, new { @class = "form-control" })
+                            </div>
+                            @Html.Label(null, "", new { @id = "lblStock" })
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            @Html.LabelFor(model => model.Categoria)
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-globe" style="color:darkcyan"></i></span>
+                                @Html.DropDownListFor(model => model.Categoria.IdCategoria, new SelectList(Model.Categoria.Categorias, "IdCategoria", "Nombre"), "Selecciona", new { @class = "form-control", @id = "ddlCategoria" })
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            @Html.LabelFor(model => model.Descuento)
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-globe" style="color:darkcyan"></i></span>
+                                @Html.DropDownListFor(model => model.Descuento.IdDescuento, new SelectList(Model.Descuento.Descuentos, "IdDescuento", "Valor"), "Selecciona", new { @class = "form-control", @id = "ddlCategoria" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label>Imagen</label>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1"><i class="bi bi-archive-fill"></i></span>
+                            <input id="fuImage" type='file' class="form-control" name="fuImage" onchange="validateFile(this), readURL(this);  " />
+                        </div>
+
+                        @Html.HiddenFor(model => model.Imagen)
+                    </div>
+                    @if (Model.Imagen != null)
+                    {
+                        <img id="Img" src="data:image/*;base64,@Model.Imagen" style="width:150px ; height:150px" />
+                    }
+                    else
+                    {
+                        <img id="Img" src="~/Imagenes/default-store-350x350.jpg" style="width:150px ; height:150px" />
+                    }
+                    <br />
+                    <br />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <a><input type="submit" value="Guardar" class="btn btn-success col-md-12" id="xlsx" /></a>
+                        </div>
+                        <div class="col-md-6">
+                            <a href="@Url.Action("GetAll","Producto")"><input type="button" value="Cancelar" class="btn btn-danger col-md-12" id="txt" /></a>
+                        </div>
+                    </div>
+
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+
+@section scripts {
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <script type="text/javascript">
+        function validateFile() {
+            var allowedExtension = ['jpeg', 'jpg', 'png'];
+            var fileExtension = document.getElementById('fuImage').value.split('.').pop().toLowerCase();
+            var isValidFile = false;
+            for (var index in allowedExtension) {
+                if (fileExtension === allowedExtension[index]) {
+                    isValidFile = true;
+                    break;
+                }
+            }
+            if (!isValidFile) {
+                alert('Las extensiones permitidas son : *.' + allowedExtension.join(', *.'));
+                document.getElementById('fuImage').value = ""
+            }
+            return isValidFile;
+        }
+
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#Img').attr('src', e.target.result);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+}
+
