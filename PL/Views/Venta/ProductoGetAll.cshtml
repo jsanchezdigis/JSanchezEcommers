@@ -47,10 +47,10 @@
             <div class="card bg-dark  h-100" style="max-width: 540px;">
                 <div class="row g-0">
                     <div class="col-md-4 ">
-                        @if (producto.Imagen != null)
+                        @if (producto.CodigoBarra != null)
                         {
 
-                            <img id="Img" src="data:image/*;base64,@producto.Imagen" class="img-fluid rounded-start" alt="..." />
+                            <img id="Img" src="data:image/*;base64,@producto.CodigoBarra" class="img-fluid rounded-start rot90" alt="..." />
 
                         }
                         else
@@ -60,22 +60,23 @@
                     </div>
                     <div class="col-md-8">
                         <div class="card-body text-white">
-                            <h5 class="card-title text-center">@producto.Nombre</h5>
-                            <hr>
-                            <p class="card-text limited-text">@producto.Descripcion</p>
-                            <p class="card-text">Precio: $@producto.Precio</p>
-                            <p class="card-text">Descuento: $@producto.PrecioVenta</p>
-                            <p class="card-text">Existencias: @producto.Stock</p>
-                            @if (producto.CodigoBarra != null)
+                            @if (producto.Imagen != null)
                             {
 
-                                <img id="Img" src="data:image/*;base64,@producto.CodigoBarra" class="img-fluid rounded-start" alt="..." style="display: block;width: 100%; margin:0 auto;," />
+                                <img id="Img" src="data:image/*;base64,@producto.Imagen" class="img-fluid rounded-start" alt="..." style="width: 150px; height: 130px;" />
 
                             }
                             else
                             {
                                 <img id="Img" src="~/Imagenes/default-store-350x350.jpg" class="img-fluid rounded-start" alt="..." />
                             }
+                            <h5 class="card-title text-center">@producto.Nombre</h5>
+                            <hr>
+                            <p class="card-text limited-text">@producto.Descripcion</p>
+                            <p class="card-text">Precio: $@producto.Precio</p>
+                            <p class="card-text">Descuento: $@producto.PrecioVenta</p>
+                            <p class="card-text">Existencias: @producto.Stock</p>
+                            
 
                             <p class="card-text">
                                 <a href="@Url.Action("CartPost", "Venta", new {IdProducto = producto.IdProducto})" class="btn btn-success">Añadir<i class="bi bi-cart3"></i> </a>
@@ -91,4 +92,12 @@
         </div>
     }
 </div>
+
+<style>
+    .rot90 {
+        position : relative;
+        top: 30px;
+        transform: rotate(90deg);
+    }
+</style>
 
